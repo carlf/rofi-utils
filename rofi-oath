@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+get_totp() {
+    ykman oath accounts code -s "$1" |
+	tr -d '\n' |
+	xclip -selection clipboard
+}
+
 if pgrep scdaemon; then
     pkill -9 scdaemon
 fi
@@ -7,5 +13,5 @@ fi
 if [[ $ROFI_RETV -eq 0 ]]; then
     ykman oath accounts list
 elif [[ $ROFI_RETV -eq 1 ]]; then
-    coproc (ykman oath accounts code -s $1 | tr -d '\n' | xclip -selection clipboard)
+    coproc get_totp "$1"
 fi

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+if pgrep scdaemon; then
+    pkill -9 scdaemon
+fi
+
+if [[ $ROFI_RETV -eq 0 ]]; then
+    ykman oath accounts list
+elif [[ $ROFI_RETV -eq 1 ]]; then
+    coproc (ykman oath accounts code -s $1 | tr -d '\n' | xclip -selection clipboard)
+fi

@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+if [[ $ROFI_RETV -eq 0 ]]; then
+    for entry in $(gopass list -f); do
+        echo "$entry"
+    done
+elif [[ $ROFI_RETV -eq 1 ]]; then
+    if [[ -z $ROFI_INFO ]]; then
+        echo -en "username\0info\x1f$@\n"
+        echo -en "password\0info\x1f$@\n"
+    else
+        if [[ $1 == "username" ]]; then
+            coproc (gopass show "$ROFI_INFO" | awk '/^username/ {print $2}' | tr -d '\n' | xclip -selection clipboard)
+        elif [[ $1 == "password" ]]; then
+            coproc (gopass -c "$ROFI_INFO")
+        else
+            exit 1
+        fi
+    fi
+else
+    exit 1
+fi

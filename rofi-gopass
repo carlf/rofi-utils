@@ -8,7 +8,7 @@ get_username() {
 }
 
 get_password() {
-    gopass -c "$ROFI_INFO"
+    gopass -c "$1"
 }
 
 if [[ $ROFI_RETV -eq 0 ]]; then
